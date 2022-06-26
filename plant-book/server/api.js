@@ -12,39 +12,33 @@ const express = require("express");
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client("611858752244-nln1lv5gg219d3v8pdddig8b24vl01sb.apps.googleusercontent.com");
 
-const {Plant, Moisture, Weather } = require("./models/plant")
+const {Plant, Moisture } = require("./models/plant")
 
-const uri = "mongodb+srv://hjdcathy:aplrt5d5a1qtr48o@cluster0.vhjrw.mongodb.net/?retryWrites=true&w=majority";
-const { MongoClient } = require('mongodb');
-
-// Create a new MongoClient
-const mongo = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-mongo.connect(err => {
-  const weather = mongo.db("plantbook").collection("weather");
-});
 // const dummyPlant = new Plant({
 //   name: "sunflower",
-//   sensorId: "1"
+//   sensorId: 1
 // });
 // dummyPlant.save();
+
 
 // const dummyMoisture = new Moisture(
 //   {
 //     moisture: 92,
-//     timestamp: new Date("2022-06-19T00:00:00.000+0000"),
-//     meta: {
-//       plantId: dummyPlant._id,
+//     timestamp: new Date("2022-6-8, 15:20:18"),
+//     metadata: {
+//       sensorId: 1,
 //       unit: "percent"
 //     }
 //   },
 // );
 // dummyMoisture.save();
+
 // const dummyMoisture2 = new Moisture(
 //   {
 //     moisture: 87,
 //     timestamp: new Date(),
 //     meta: {
-//       plantId: dummyPlant._id,
+//       sensorId: 2,
 //       unit: "percent"
 //     }
 //   }
@@ -55,8 +49,12 @@ mongo.connect(err => {
 // api endpoints: all these paths will be prefixed with "/api/"
 const router = express.Router();
 
+router.get("/moistures", (req, res) => {
+  Moisture.find({'metadata.sensorId': 1}).then((moistures) => res.send(moistures));
+});
+
 router.get("/plants", (req, res) => {
-  Weather.find({}).then((plants) => res.send(plants));
+  Plant.find({}).then((plants) => res.send(plants));
 });
 
 // anything else falls to this "not found" case
