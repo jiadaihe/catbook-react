@@ -24,7 +24,7 @@ const App = () => {
       <>
         <NavBar />
         <div className="App-container">
-            <Router>
+            <Router> 
                 <Plant path="/" />
                 <NotFound default />
             </Router>

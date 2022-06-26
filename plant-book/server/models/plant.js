@@ -3,19 +3,19 @@ const mongoose = require("mongoose");
 const MoistureSchema = new mongoose.Schema(
     {
         moisture: Number,
-        ts: Date,
-        meta: {
-            plantId: String,
+        timestamp: Date,
+        metadata: {
             unit: String,
             sensorId: String,
         }
     },
     {
         timeseries: {
-            timeField: "ts",
-            metaField: "meta",
+            timeField: "timestamp",
+            metaField: "metadata",
             granularity: "hours",
-        }
+        },
+        // expireAfterSeconds: 86400
     }
 );
 
@@ -38,33 +38,14 @@ const MoistureSchema = new mongoose.Schema(
 // );
 
 const PlantSchema = new mongoose.Schema({
-  name: String,
-  sensorId: String
+    name: String,
+    sensorId: String
 });
 
-const weatherSchema = new mongoose.Schema(
-    {
-      timestamp: {
-        type: Date,
-      },
-      temp: Number,
-      metadata: { sensorId: String, type: String}
-    },
-    {
-      timeseries: {
-        timeField: "timestamp",
-        metaField: "metadata",
-        granularity: "hours"
-      },
-    }
-  );
-  
-const Weather = mongoose.model("weather", weatherSchema);
-  
 
 // compile model from schema
 const Plant = mongoose.model("Plant", PlantSchema);
 const Moisture = mongoose.model("Moisture", MoistureSchema);
 // const Temperature = mongoose.model("Temperature", TemperatureSchema);
 
-module.exports = {Plant, Moisture, Weather};
+module.exports = {Plant, Moisture};

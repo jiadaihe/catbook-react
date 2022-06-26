@@ -25,38 +25,47 @@ const SinglePlant = (props) => {
     //         />
     //     </div>
     // )
+    const [moistures, setMoistures] = useState([]);
+    useEffect(() => {
+        get("api/moistures").then( (moisObjs) => {
+            setMoistures(moisObjs);
+            // console.log(JSON.stringify(moisObjs));
+        });
+    }, []);
+    console.log(JSON.stringify(moistures));
     return (
         <div>
-            {props.moisture}: {props.temperature}
+            {props.name}: {JSON.stringify(moistures)}
         </div>
     )
 };
 
 const Plant = () => {
     const [plants, setPlants] = useState([]);
-
     useEffect(() => {
         get("api/plants").then( (plantObjs) => {
-            // const temperatures = plantObjs.map(obj => {
-            //     obj.temp
-            // });
             setPlants(plantObjs);
         });
     }, []);
-    let plantList = null;
-    const hasPlants = plants.length !== 0;
-    if (hasPlants) {
-        plantList = plants.map( (obj) => (
-            <SinglePlant moisture={obj.name} temperature={obj.sensorId}/>
-        ));
-    } else {
-        plantList = <div>No Plants!</div>
+
+    if (plants.length === 0) {
+        return (
+            <div>No Plants!</div>
+        );
     }
+
+    const plantList = plants.map( (plantObj) => (
+        <SinglePlant id={plantObj.sensorId} name={plantObj.name} />
+    ))
+    console.log("here 2")
+    console.log(plantList)
+
     return (
         <>
         {plantList}
         </>
-    )    
+    ) 
+  
 };
 
 export default Plant;
